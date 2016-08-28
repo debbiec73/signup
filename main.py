@@ -82,6 +82,7 @@ class MainHandler(webapp2.RequestHandler):
 
     def post(self):
         have_error = False
+        global username
         username = self.request.get('username')
         password = self.request.get('password')
         cpwd = self.request.get('cpwd')
@@ -124,6 +125,19 @@ class MainHandler(webapp2.RequestHandler):
 
         #self.write_form(errname_escaped, errpwd_escaped, errorcpwd_escaped, erroremail_escaped, username, email)
         self.write_form(error_name, error_noname, error_pwd, error_cpwd, error_email)
+
+        if(name and pwd and em and (password == cpwd)):
+            self.redirect("/welcome")
+
+class Welcome(MainHandler):
+
+    def get(self):
+
+        response = "<h1>" "Welcome " + username + "!" "</h1>"
+        #response = welcome
+        self.response.write(response)
+
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/welcome', Welcome)
 ], debug=True)
